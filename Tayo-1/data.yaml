@@ -1,0 +1,13 @@
+names:
+- car
+- license-plate
+nc: 2
+roboflow:
+  license: CC BY 4.0
+  project: tayo-seyzi
+  url: https://universe.roboflow.com/project/tayo-seyzi/dataset/1
+  version: 1
+  workspace: project
+test: ../test/images
+train: Tayo-1/train/images
+val: Tayo-1/valid/images
