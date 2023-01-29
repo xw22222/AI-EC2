@@ -12,6 +12,18 @@ import time
 """
 folder_path = './input_img/'
 path = './crops'
+
+def easy_ocr (path) :
+    reader = easyocr.Reader(['ko', 'en'], gpu=False)
+    result = reader.readtext(path)
+    read_result = result[0][1]
+    read_confid = int(round(result[0][2], 2) * 100)
+    print("===== Crop Image OCR Read - Easy ======")
+    print(f'Easy OCR 결과     : {read_result}')
+    print(f'Easy OCR 확률     : {read_confid}%')
+    print("=======================================")
+
+
 # each_file_path_and_gen_time: 각 file의 경로와, 생성 시간을 저장함
 each_file_path_and_gen_time = []
 for each_file_name in os.listdir(folder_path):
@@ -29,22 +41,30 @@ most_recent_file = max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
 
 img = Image.open(most_recent_file) # PIL
+img = img.filter(ImageFilter.GaussianBlur(radius =1))
 
 results = model(img, size=640)
+df = results.pandas().xyxy[0]
 crops = results.crop(save=False)
 
 for num, crop in enumerate(crops) :
-    if 'plate' in crop['label'] and crop['conf'].item() :
+    if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
         image = crop['im']
         im = Image.fromarray(image)
-        im.save(os.path.join(path, f'plate_{num}.png'), 'png')
-
+        im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
         plate_name = df['name'][1]
         plate_conf = int((round(df['confidence'][1], 2)) * 100)
+        print("====== Crop Image Plate predict =======")
         print(f'{plate_name} 예측 확률 : {plate_conf}%')
+        print("=======================================")
 
 file_list = os.listdir(path)
 
+for num, file in enumerate(file_list):
+    easy_ocr(f'{path}/{file}')
+
+
+"""
 for num, file in enumerate(file_list):
     reader = easyocr.Reader(['ko', 'en'], gpu=False)
     text = reader.readtext(os.path.join(path, file))
@@ -53,7 +73,8 @@ for num, file in enumerate(file_list):
     print(f'OCR 결과 : {read_result}')
     print(f'OCR 확률 : {read_confid}%')
 
-"""
+
+
 reader = easyocr.Reader(['ko', 'en'], gpu=False)
 result = reader.readtext(crops)
 read_result = result[0][1]
