@@ -26,7 +26,7 @@ most_recent_file = max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
 
 
 # Model load
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='yolov5n_best.pt', force_reload=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
 
 img = Image.open(most_recent_file) # PIL
 
