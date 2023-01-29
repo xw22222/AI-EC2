@@ -33,10 +33,32 @@ img = Image.open(most_recent_file) # PIL
 results = model(img, size=640)
 crops = results.crop(save=False)
 
+for num, crop in enumerate(crops) :
+    if 'plate' in crop['label'] and crop['conf'].item() :
+        image = crop['im']
+        im = Image.fromarray(image)
+        im.save(os.path.join(path, f'plate_{num}.png'), 'png')
+
+        plate_name = df['name'][1]
+        plate_conf = int((round(df['confidence'][1], 2)) * 100)
+        print(f'{plate_name} 예측 확률 : {plate_conf}%')
+
+file_list = os.listdir(path)
+
+for num, file in enumerate(file_list):
+    reader = easyocr.Reader(['ko', 'en'], gpu=False)
+    text = reader.readtext(os.path.join(path, file))
+    read_result = text[0][1]
+    read_confid = int(round(text[0][2], 2) * 100)
+    print(f'OCR 결과 : {read_result}')
+    print(f'OCR 확률 : {read_confid}%')
+
+"""
 reader = easyocr.Reader(['ko', 'en'], gpu=False)
 result = reader.readtext(crops)
 read_result = result[0][1]
 print("===== Crop Image OCR Read - Easy ======")
 print(f'Easy OCR 결과     : {read_result}')
 print("=======================================")
+"""
 
