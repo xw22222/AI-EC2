@@ -43,7 +43,6 @@ img = img.filter(ImageFilter.GaussianBlur(radius =1))
 
 results = model(img, size=640)
 df = results.pandas().xyxy[0]
-
 crops = results.crop(save=False)
 # conf = (crop[0]['conf'].item() * 100)
 
@@ -57,7 +56,7 @@ for num, crop in enumerate(crops) :
         print("====== Crop Image Plate predict =======")
         print(f'{plate_name} 예측 확률 : {plate_conf}%')
         print("=======================================")
-
+        
 file_list = os.listdir(path)
 
 for num, file in enumerate(file_list):
