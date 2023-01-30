@@ -9,9 +9,7 @@ import time
 
 # 가장 최근 파일을 리턴하는 함수 : 짠거
 def recently(folder_path) :
-
     each_file_path_and_gen_time = []
-
     for each_file_name in os.listdir(folder_path):
     # getctime: 입력받은 경로에 대한 생성 시간을 리턴
         each_file_path = folder_path + each_file_name
@@ -65,7 +63,7 @@ crops = results.crop(save=False)
 # conf = (crop[0]['conf'].item() * 100)
 
 for num, crop in enumerate(crops) :
-    if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
+    if 'plate' in crop['label'] and crop['conf'].item() * 100 > 1 :
         image = crop['im']
         im = Image.fromarray(image)   
 im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
