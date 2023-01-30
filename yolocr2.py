@@ -10,15 +10,6 @@ import time
 folder_path = './input_img/'
 path = './crops'
 # OCR 결과 읽는 부분 .txt파일로 저장 예정
-def easy_ocr (path) :
-    reader = easyocr.Reader(['ko', 'en'], gpu=True)
-    result = reader.readtext(path)
-    read_result = result[0][1]
-    read_confid = int(round(result[0][2], 2) * 100)
-    print("===== Crop Image OCR Read - Easy ======")
-    print(f'Easy OCR 결과     : {read_result}')
-    print(f'Easy OCR 확률     : {read_confid}%')
-    print("=======================================")
 
 
 # 특정 folder 내에 있는 "가장 최근에 생성된" 파일을 리턴 
@@ -45,15 +36,27 @@ df = results.pandas().xyxy[0]
 crops = results.crop(save=False)
 # conf = (crop[0]['conf'].item() * 100)
 
+#crops 이미지 저장없이 결과만 출력하고 결과를 S3에 반환하니까 주석처리 
+"""
 for num, crop in enumerate(crops) :
     if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
         image = crop['im']
-        im = Image.fromarray(image)
-#crops 이미지 저장없이 결과만 출력하고 결과를 S3에 반환하는법         
+        im = Image.fromarray(image)      
         im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
+"""
+reader = easyocr.Reader(['ko', 'en'], gpu=True)
+result = reader.readtext(crops)
+read_result = result[0][1]
+read_confid = int(round(result[0][2], 2) * 100)
+print("===== Crop Image OCR Read - Easy ======")
+print(f'Easy OCR 결과     : {read_result}')
+print(f'Easy OCR 확률     : {read_confid}%')
+print("=======================================")
 
 
+"""
 file_list = os.listdir(path)
 
 for num, file in enumerate(file_list):
     easy_ocr(f'{path}/{file}')
+"""
