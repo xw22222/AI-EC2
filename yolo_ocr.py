@@ -47,8 +47,7 @@ df = results.pandas().xyxy[0]
 crops = results.crop(save=True)
 
 file_list = os.listdir(path)
-"""
+
 for num, file in enumerate(file_list):
     easy_ocr(f'{path}/{file}')
-"""
 
