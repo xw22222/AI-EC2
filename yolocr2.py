@@ -9,7 +9,7 @@ import time
 
 folder_path = './input_img/'
 path = './crops'
-
+# OCR 결과 읽는 부분 .txt파일로 저장 예정
 def easy_ocr (path) :
     reader = easyocr.Reader(['ko', 'en'], gpu=True)
     result = reader.readtext(path)
@@ -35,7 +35,7 @@ for each_file_name in os.listdir(folder_path):
 most_recent_file = max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
 
 # yolo Model load : 학습모델 경로 ./best.pt
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=False)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
 # 가장 최근 저장된 차량 이미지 읽기 
 img = Image.open(most_recent_file) # PIL
 img = img.filter(ImageFilter.GaussianBlur(radius =1))
@@ -44,13 +44,14 @@ results = model(img, size=640)
 df = results.pandas().xyxy[0]
 crops = results.crop(save=False)
 # conf = (crop[0]['conf'].item() * 100)
-
+"""
 for num, crop in enumerate(crops) :
     if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
         image = crop['im']
         im = Image.fromarray(image)
 #crops 이미지 저장없이 결과만 출력하고 결과를 S3에 반환하는법         
         im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
+"""
 
 file_list = os.listdir(path)
 

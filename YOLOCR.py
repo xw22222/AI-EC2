@@ -1,3 +1,4 @@
+# 지금까지 cops한 이미지 결과 확인용 파일 
 import os
 import warnings
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -36,7 +37,7 @@ for each_file_name in os.listdir(folder_path):
 most_recent_file = max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
 
 # Model load
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=False)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
 
 img = Image.open(most_recent_file) # PIL
 img = img.filter(ImageFilter.GaussianBlur(radius =1))
