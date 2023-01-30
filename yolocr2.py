@@ -5,6 +5,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 import torch
 from PIL import Image, ImageFilter
 import easyocr
+import pytesseract
 import time
 
 # 가장 최근 파일을 리턴하는 함수 : 짠거
@@ -66,7 +67,8 @@ for num, crop in enumerate(crops) :
     if 'plate' in crop['label'] and crop['conf'].item() * 100 > 1 :
         image = crop['im']
         im = Image.fromarray(image)   
-        im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
+        im.save(os.path.join(path, f'plate_result.jpg'), 'jpg')
+        #im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
 
 
 """
