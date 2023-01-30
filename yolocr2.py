@@ -49,7 +49,7 @@ for num, crop in enumerate(crops) :
     if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
         image = crop['im']
         im = Image.fromarray(image)
-#crops 이미지 저장없이 결과만 출력하고 결과를 S3에 반환         
+#crops 이미지 저장없이 결과만 출력하고 결과를 S3에 반환하는법         
         im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
 
 
@@ -59,3 +59,4 @@ file_list = os.listdir(path)
 for num, file in enumerate(file_list):
     easy_ocr(f'{path}/{file}')
 """
+easy_ocr()
