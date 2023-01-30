@@ -11,7 +11,7 @@ folder_path = './input_img/'
 path = './crops'
 
 def easy_ocr (path) :
-    reader = easyocr.Reader(['ko', 'en'], gpu=False)
+    reader = easyocr.Reader(['ko', 'en'], gpu=True)
     result = reader.readtext(path)
     read_result = result[0][1]
     read_confid = int(round(result[0][2], 2) * 100)
