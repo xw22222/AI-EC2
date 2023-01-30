@@ -37,7 +37,7 @@ def easy_ocr (path) :
 
 
 # Model load
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=False)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
 
 img = Image.open(most_recent_file) # PIL
 img = img.filter(ImageFilter.GaussianBlur(radius =1))
