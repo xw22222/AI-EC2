@@ -35,7 +35,7 @@ for each_file_name in os.listdir(folder_path):
 most_recent_file = max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
 
 # yolo Model load : 학습모델 경로 ./best.pt
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=False)
 # 가장 최근 저장된 차량 이미지 읽기 
 img = Image.open(most_recent_file) # PIL
 img = img.filter(ImageFilter.GaussianBlur(radius =1))
@@ -51,12 +51,8 @@ for num, crop in enumerate(crops) :
         im = Image.fromarray(image)
 #crops 이미지 저장없이 결과만 출력하고 결과를 S3에 반환하는법         
         im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
-easy_ocr(im)
 
-
-"""
 file_list = os.listdir(path)
 
 for num, file in enumerate(file_list):
     easy_ocr(f'{path}/{file}')
-"""

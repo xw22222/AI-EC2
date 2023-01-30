@@ -36,7 +36,7 @@ for each_file_name in os.listdir(folder_path):
 most_recent_file = max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
 
 # Model load
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=False)
 
 img = Image.open(most_recent_file) # PIL
 img = img.filter(ImageFilter.GaussianBlur(radius =1))
