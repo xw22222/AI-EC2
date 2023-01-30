@@ -36,16 +36,17 @@ df = results.pandas().xyxy[0]
 crops = results.crop(save=False)
 # conf = (crop[0]['conf'].item() * 100)
 
-
+"""
 for num, crop in enumerate(crops) :
     if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
         image = crop['im']
         im = Image.fromarray(image)   
        #crops 이미지 저장없이 결과만 출력하고 결과를 S3에 반환   
        # im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
+"""
 
 reader = easyocr.Reader(['ko', 'en'], gpu=True)
-result = reader.readtext(im)
+result = reader.readtext(df)
 read_result = result[0][1]
 read_confid = int(round(result[0][2], 2) * 100)
 print("===== Crop Image OCR Read - Easy ======")
