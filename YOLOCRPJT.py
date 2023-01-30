@@ -1,3 +1,5 @@
+## 프로젝트 run 용 YOLOCR 
+
 import os
 import warnings
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -64,11 +66,10 @@ crops = results.crop(save=False)
 # conf = (crop[0]['conf'].item() * 100)
 
 for num, crop in enumerate(crops) :
-    if 'plate' in crop['label'] and crop['conf'].item() * 100 > 1 :
+    if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
         image = crop['im']
         im = Image.fromarray(image)   
-        im.save(os.path.join(path, f'plate_result.png'), 'png')
-        #im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
+        im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
 
 
 """

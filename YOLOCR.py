@@ -1,4 +1,5 @@
-# 지금까지 cops한 이미지 결과 확인용 파일 
+# 이미지 돌려본거 모델 평가용 파일 
+
 import os
 import warnings
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -6,11 +7,9 @@ warnings.filterwarnings("ignore", category=UserWarning)
 import torch
 from PIL import Image, ImageFilter
 import easyocr
+import pytesseract
 import time
 
-"""
-- 특정 folder 내에 있는 "가장 최근에 생성된" 파일을 리턴하는 방법 
-"""
 folder_path = './input_img/'
 path = './crops'
 
@@ -48,7 +47,7 @@ crops = results.crop(save=False)
 # conf = (crop[0]['conf'].item() * 100)
 
 for num, crop in enumerate(crops) :
-    if 'plate' in crop['label'] and crop['conf'].item() * 100 > 1 :
+    if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
         image = crop['im']
         im = Image.fromarray(image)
         im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
