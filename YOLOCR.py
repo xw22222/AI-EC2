@@ -51,12 +51,13 @@ for num, crop in enumerate(crops) :
         image = crop['im']
         im = Image.fromarray(image)
         im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
+        """
         plate_name = df['name'][1]
         plate_conf = int((round(df['confidence'][1], 2)) * 100)
         print("====== Crop Image Plate predict =======")
         print(f'{plate_name} 예측 확률 : {plate_conf}%')
         print("=======================================")
-        
+        """
 file_list = os.listdir(path)
 
 for num, file in enumerate(file_list):
