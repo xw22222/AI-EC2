@@ -67,7 +67,7 @@ for num, crop in enumerate(crops) :
     if 'plate' in crop['label'] and crop['conf'].item() * 100 > 1 :
         image = crop['im']
         im = Image.fromarray(image)   
-        im.save(os.path.join(path, f'plate_result.jpg'), 'jpg')
+        im.save(os.path.join(path, f'plate_result.png'), 'png')
         #im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
 
 
