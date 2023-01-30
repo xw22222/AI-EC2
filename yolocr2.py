@@ -77,4 +77,4 @@ file_list = os.listdir(path)
 for num, file in enumerate(file_list):
 """
 #실행부 
-easy_ocr(recently('./crops'))
+easy_ocr(recently('./crops/'))
