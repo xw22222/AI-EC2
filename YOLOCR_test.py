@@ -57,7 +57,7 @@ class Handler(FileSystemEventHandler):
                 im = Image.fromarray(image)   
                 im.save(os.path.join(pathc, f'plate_{num}.png'), 'png',dpi=(300,300))
 
-        self.easy_ocr(self.recently(pathc))
+        event.easy_ocr(self.recently(pathc))
         
     def easy_ocr (self, path) :
         reader = easyocr.Reader(['ko'], gpu=True)
