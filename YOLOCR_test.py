@@ -38,20 +38,23 @@ class Handler(FileSystemEventHandler):
 #아래 핸들러들을 오버라이드 함
 
     def on_created(self, event): #파일, 디렉터리가 생성되면 실행
-        if not event.is_directory:
-            model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
-            img = Image.open(self.recently('./input_img/')) # PIL
-            img = img.filter(ImageFilter.GaussianBlur(radius =1))
-            results = model(img, size=640)
-            df = results.pandas().xyxy[0]
-            crops = results.crop(save=False)
-            for num, crop in enumerate(crops) :
-                if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
-                    image = crop['im']
-                    im = Image.fromarray(image)   
-                    im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
+        self.do_action(event)
 
-        self.easy_ocr(self.recently('./crops/'))
+    def do_action(self, event):
+        path = './crops/'
+        model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
+        img = Image.open(self.recently('./input_img/')) # PIL
+        img = img.filter(ImageFilter.GaussianBlur(radius =1))
+        results = model(img, size=640)
+        df = results.pandas().xyxy[0]
+        crops = results.crop(save=False)
+        for num, crop in enumerate(crops) :
+            if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
+                image = crop['im']
+                im = Image.fromarray(image)   
+                im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
+
+        self.easy_ocr(self.recently(path))
         
     def easy_ocr (self, path) :
         reader = easyocr.Reader(['ko'], gpu=True)
@@ -73,7 +76,6 @@ class Handler(FileSystemEventHandler):
             (each_file_path, each_file_gen_time)
             ) 
         return max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
-
 
 
 
