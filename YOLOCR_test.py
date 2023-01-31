@@ -68,7 +68,6 @@ class Handler(FileSystemEventHandler):
                 # 가장 최근 생성된 차량 이미지 읽기 
                 img = Image.open(recently('./input_img/')) # PIL
                 img = img.filter(ImageFilter.GaussianBlur(radius =1))
-
 # 이미지 크롭 
                 results = model(img, size=640)
                 df = results.pandas().xyxy[0]
@@ -82,10 +81,10 @@ class Handler(FileSystemEventHandler):
                         im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
 
 #가장 최근 생성된 Crops 결과 이미지 easy_ocr 함수 읽기  #실행부
-                        easy_ocr(recently('./crops/'))
+                        self.easy_ocr(recently('./crops/'))
         else:
             print("입차 차량 없음")
         
-
-w = Target()
-w.run()
+if __name__ == '__main__': #본 파일에서 실행될 때만 실행되도록 함
+    w = Target()
+    w.run()
