@@ -39,7 +39,7 @@ def easy_ocr (path) :
 # 마운트 포인트 : Input_img dir에 새로운 이미지 생성(새로운 차량)시 감지/이벤트 발생 
 class Target:
 
-    watchDir = os.getcwd('./input_img/')
+    watchDir = './input_img/'
     #watchDir에 감시하려는 디렉토리를 명시한다.
 
     def __init__(self):
