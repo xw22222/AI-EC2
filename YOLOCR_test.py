@@ -61,28 +61,28 @@ class Handler(FileSystemEventHandler):
 #FileSystemEventHandler 클래스를 상속받음.
 #아래 핸들러들을 오버라이드 함
 
-    def on_created(self, event): #파일, 디렉터리가 생성되면 실행
-        #if event.is_directory:
+    def on_created(easy_ocr,event,recently): #파일, 디렉터리가 생성되면 실행
+        if not event.is_directory:
                 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
-        model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
+            model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
                 # 가장 최근 생성된 차량 이미지 읽기 
-        img = Image.open(recently('./input_img/')) # PIL
-        img = img.filter(ImageFilter.GaussianBlur(radius =1))
+            img = Image.open(recently('./input_img/')) # PIL
+            img = img.filter(ImageFilter.GaussianBlur(radius =1))
 # 이미지 크롭 
-        results = model(img, size=640)
-        df = results.pandas().xyxy[0]
-        crops = results.crop(save=False)
+            results = model(img, size=640)
+            df = results.pandas().xyxy[0]
+            crops = results.crop(save=False)
 # conf = (crop[0]['conf'].item() * 100)
 
-        for num, crop in enumerate(crops) :
-            if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
-                image = crop['im']
-                im = Image.fromarray(image)   
-                im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
+            for num, crop in enumerate(crops) :
+                if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
+                    image = crop['im']
+                    im = Image.fromarray(image)   
+                    im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
 
 #가장 최근 생성된 Crops 결과 이미지 easy_ocr 함수 읽기  #실행부
         easy_ocr(recently('./crops/'))
-        
+
 if __name__ == '__main__': #본 파일에서 실행될 때만 실행되도록 함
     w = Target()
     w.run()
