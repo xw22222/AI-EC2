@@ -36,11 +36,8 @@ class Target:
 class Handler(FileSystemEventHandler):
 #FileSystemEventHandler 클래스를 상속받음.
 #아래 핸들러들을 오버라이드 함
-
     def on_created(self, event): #파일, 디렉터리가 생성되면 실행
-        if event.is_directory: 
-            return None
-        elif event.event_type == 'created' :
+        if event.is_directory : 
             self.do_action(event)
 
     def do_action(self, event):
@@ -57,7 +54,7 @@ class Handler(FileSystemEventHandler):
                 im = Image.fromarray(image)   
                 im.save(os.path.join(pathc, f'plate_{num}.png'), 'png',dpi=(300,300))
 
-        event.easy_ocr(self.recently(pathc))
+        self.easy_ocr(self.recently(pathc))
         
     def easy_ocr (self, path) :
         reader = easyocr.Reader(['ko'], gpu=True)
