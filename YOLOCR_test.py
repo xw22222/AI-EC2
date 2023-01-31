@@ -38,7 +38,7 @@ class Handler(FileSystemEventHandler):
 #아래 핸들러들을 오버라이드 함
     def on_created(self, event): #파일, 디렉터리가 생성되면 실행
         if event.is_directory : 
-            self.do_action(event)
+            print("Watchdog received created event - % s." % event.src_path)
 
     def do_action(self, event):
         pathc = './crops/'
