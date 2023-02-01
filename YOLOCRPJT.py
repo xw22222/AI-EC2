@@ -1,6 +1,6 @@
 ## 프로젝트 run 용 YOLOCR : 이거만 짜면됨 
-
-import os
+import boto3
+import os, sys, time
 import warnings
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -8,8 +8,10 @@ import torch
 from PIL import Image, ImageFilter
 import easyocr
 import pytesseract
-import time
 
+S3 = boto3.client('s3')
+bucket = '1iotjj/kjtest/'
+path = './crops'
 # 가장 최근 생성된 파일을 리턴하는 함수 : 짠거
 def recently(folder_path) :
     each_file_path_and_gen_time = []
@@ -33,10 +35,14 @@ def easy_ocr (path) :
     print("===== Crop Image OCR Read - Easy ======")
     print(f'Easy OCR 결과     : {read_result}')
     print(f'Easy OCR 확률     : {read_confid}%')
-    print("=======================================")
+    print("===========번호.txt 저장 : /txresult=============")
+    sys.stdout = open(read_result, 'w')
+    sys.stdout.close()
+        # 여기서 boto3 바로 쓰면 굳이 저장안해도됨 서버에 
+
 
 #크롭 이미지 저장된거 덮어쓰기 됨?
-path = './crops'
+
 
 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
@@ -60,3 +66,4 @@ for num, crop in enumerate(crops) :
 #가장 최근 생성된 Crops 결과 이미지 easy_ocr 함수 읽기 
 #실행부 
 easy_ocr(recently('./crops/'))
+s3.upload_file(recently('./txtresult'), bucket,recently('./txtresult'))
