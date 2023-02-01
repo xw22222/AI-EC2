@@ -36,8 +36,9 @@ def easy_ocr (path) :
     print(f'Easy OCR 결과     : {read_result}')
     print(f'Easy OCR 확률     : {read_confid}%')
     print("===========번호.txt 저장 : /txresult=============")
-    sys.stdout = open({read_result}.txt, 'w')
-    sys.stdout.close()
+    f = open(f'{num}','w')
+    f.write(read_result)
+    f.close()
         # 여기서 boto3 바로 쓰면 굳이 저장안해도됨 서버에 
 
 
