@@ -36,10 +36,10 @@ def easy_ocr (path) :
     print(f'Easy OCR 결과     : {read_result}')
     print(f'Easy OCR 확률     : {read_confid}%')
     print("===========번호.txt 저장 : /txresult=============")
-    f = open(f'{num}','w')
+    f = open(f'{read_result}.txt,w')
     f.write(read_result)
     f.close()
-        # 여기서 boto3 바로 쓰면 굳이 저장안해도됨 서버에 
+        # 여기서 boto3 바로 쓰면 굳이 저장안해도됨 서버에 ?
 
 
 #크롭 이미지 저장된거 덮어쓰기 됨?
@@ -62,7 +62,7 @@ for num, crop in enumerate(crops) :
     if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
         image = crop['im']
         im = Image.fromarray(image)   
-        im.save(os.path.join(path, f'plate_{num}.png'), 'png',dpi=(300,300))
+        im.save(os.path.join(path, f'plate_{img}.png'), 'png',dpi=(300,300))
 
 #가장 최근 생성된 Crops 결과 이미지 easy_ocr 함수 읽기 
 #실행부 
