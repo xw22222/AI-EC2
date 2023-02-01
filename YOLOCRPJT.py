@@ -10,7 +10,7 @@ import easyocr
 import pytesseract
 
 S3 = boto3.client('s3')
-bucket = '1iotjj/kjtest/'
+bucket = '1iotjj/kjtest'
 path = './crops'
 # 가장 최근 생성된 파일을 리턴하는 함수 : 짠거
 def recently(folder_path) :
@@ -66,4 +66,4 @@ for num, crop in enumerate(crops) :
 #가장 최근 생성된 Crops 결과 이미지 easy_ocr 함수 읽기 
 #실행부 
 easy_ocr(recently('./crops/'))
-s3.upload_file(recently('./txtresult'), bucket,recently('./txtresult'))
+#s3.upload_file(recently('./txtresult'), bucket,recently('./txtresult'))
