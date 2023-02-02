@@ -43,7 +43,7 @@ def easy_ocr_origin (path) :
     #f.write(read_result)
     #f.close()
     #S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt')  boto3 버킷 업로드
-
+"""
 def easy_ocr_new (path) :
     reader = easyocr.Reader(['ko'], gpu=True)
     result = reader.readtext(path)
@@ -59,7 +59,7 @@ def easy_ocr_new (path) :
     #f.write(read_result)
     #f.close()
     #S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt')  boto3 버킷 업로드
-
+"""
 
 #최초 이미지 path : input_img
 V1_path = './input_img/'
@@ -106,6 +106,6 @@ def YOLOV2(path) :
 
 YOLOV1(V1_path)
 easy_ocr_origin(recently(V2_input_path))
-YOLOV2(V2_result_path)
-easy_ocr_new(recently(V2_result_path))
+# YOLOV2(V2_result_path)
+#easy_ocr_new(recently(V2_result_path))
 
