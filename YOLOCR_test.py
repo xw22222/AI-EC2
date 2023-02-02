@@ -76,7 +76,8 @@ def YOLOV1(path) :
     df = results.pandas().xyxy[0]
     crops = results.crop(save=False) # ./test_crops1 dir 생성 요
     for num, crop in enumerate(crops) :
-        if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
+        if 'plate' in crop['label'] and crop['conf'].item():
+            # if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 : 이부분 땜에 V2안먹힘
             image = crop['im']
             im = Image.fromarray(image)   
             im.save(os.path.join(V2_input_path , f'V2결과.png'), 'png',dpi=(300,300))
