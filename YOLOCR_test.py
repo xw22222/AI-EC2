@@ -74,7 +74,8 @@ def YOLOV1(path) :
     img = img.filter(ImageFilter.GaussianBlur(radius =1))
     results = model(img, size=640) # 이미지 크롭 
     df = results.pandas().xyxy[0]
-    crops = results.crop(save=False) # ./test_crops1 dir 생성 요
+    crops = results.crop(save=True) # ./test_crops1 dir 생성 요
+    """
     for num, crop in enumerate(crops) :
         if 'plate' in crop['label'] and crop['conf'].item() * 100 > 0:
             # if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 : 이부분 땜에 V2안먹힘 
@@ -82,7 +83,7 @@ def YOLOV1(path) :
             im = Image.fromarray(image)   
             im.save(os.path.join(V2_input_path , f'V2결과.png'), 'png',dpi=(300,300))
             # V1결과.png : 차량이미지에서 번호판 부분만 추출된 이미지
-
+    """
 # 1차 crop된 이미지 path : test_crops1
 
 # yolo ModelV2 load : 2차 모델 루트 dir : ./yolov5s.pt // 준호님이 주신 프로젝트에서 : runs/train/exp2/weights/best.pt뽑아서
