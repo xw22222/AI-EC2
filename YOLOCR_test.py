@@ -74,7 +74,7 @@ def YOLOV1(path) :
     img = img.filter(ImageFilter.GaussianBlur(radius =1))
     results = model(img, size=640) # 이미지 크롭 
     df = results.pandas().xyxy[0]
-    crops = results.crop(save=True) # ./test_crops1 dir 생성 요
+    crops = results.crop(save=False) # ./test_crops1 dir 생성 요
     for num, crop in enumerate(crops) :
         if 'plate' in crop['label'] and crop['conf'].item() * 100 > 0:
             # if 'plate' in crop['label'] and crop['conf'].item() 
@@ -93,9 +93,9 @@ def YOLOV2(path) :
     img = img.filter(ImageFilter.GaussianBlur(radius =1))
     results = model(img, size=640) # 이미지 크롭 
     df = results.pandas().xyxy[0]
-    crops = results.crop(save=False) # ./test_crops2 dir 생성 요
+    crops = results.crop(save=True) # ./test_crops2 dir 생성 요
     for num, crop in enumerate(crops) :
-        if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
+        if 'plate' in crop['label'] and crop['conf'].item() * 100 > 0 : # 100>0 수정
             image = crop['im']
             im = Image.fromarray(image)   
             im.save(os.path.join(V2_result_path , f'V2결과.png'), 'png',dpi=(300,300))
