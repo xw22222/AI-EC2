@@ -42,8 +42,8 @@ def easy_ocr (path) :
     f = open(f'carnum.txt','w') # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요없기때문
     f.write(read_result)
     f.close()
-    s3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt')
-    
+    S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt')
+
     #s3.upload_file(recently('./txtresult'), bucket,recently('./txtresult'))
     #s3.upload_file(f'carnum.txt' , bucket,'%s/%s' % (carnum/, object_name=None))
     #s3.upload_file(file_path,bucket_name, '%s/%s' % (bucket_folder,dest_file_name))
