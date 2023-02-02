@@ -63,6 +63,7 @@ def easy_ocr_new (path) :
 
 #최초 이미지 path : input_img
 V1_path = './input_img/'
+V2_input_path = './test_crops1/'
 # yolo ModelV1 load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
 def YOLOV1(V1_path) :
     model = torch.hub.load('ultralytics/yolov5', 'custom', path='./V2.pt', force_reload=True)
@@ -83,7 +84,6 @@ def YOLOV1(V1_path) :
 V2_input_path = './test_crops1/'
 # yolo ModelV2 load : 2차 모델 루트 dir : ./yolov5s.pt // 준호님이 주신 프로젝트에서 : runs/train/exp2/weights/best.pt뽑아서
 # 배포 프로젝트(여기)./ 루트경로에 삽입 -> name : V2.pt
-"""
 def YOLOV2(V2_input_path) :
     model = torch.hub.load('ultralytics/yolov5', 'custom', path='./V2.pt', force_reload=True)
     # 가장 최근 생성된 차량 이미지 읽기 
@@ -99,11 +99,12 @@ def YOLOV2(V2_input_path) :
             im.save(os.path.join(V2_result_path , f'V2결과.png'), 'png',dpi=(300,300))
             # V2결과.png : 차량이미지에서 번호판 부분만 추출된 이미지에서 숫자를 검출 하는거 까지
 
-"""
+
 # 실행부
 V2_result_path = './test_crops2/'
-YOLOV1(V1_path)
-#YOLOV2(V2_input_path)
+
+YOLOV1()
+YOLOV2()
 easy_ocr_origin(recently(V2_input_path))
-#easy_ocr_new(recently(V2_result_path))
+easy_ocr_new(recently(V2_result_path))
 
