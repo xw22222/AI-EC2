@@ -10,8 +10,9 @@ import easyocr
 import pytesseract
 
 S3 = boto3.client('s3')
-bucket = '1iotjj/kjtest'
+bucket = '1iotjj/carnum'
 path = './crops'
+
 # 가장 최근 생성된 파일을 리턴하는 함수 : 짠거
 def recently(folder_path) :
     each_file_path_and_gen_time = []
@@ -35,14 +36,16 @@ def easy_ocr (path) :
     print("===== Crop Image OCR Read - Easy ======")
     print(f'Easy OCR 결과     : {read_result}')
     print(f'Easy OCR 확률     : {read_confid}%')
-    print("===========번호.txt 저장 : /txresult=============")
-    f = open(f'{read_result}.txt','w')
+    print("===========carum.txt 저장 및 버킷 /carnum 전송===========")
+    #f = open(f'{read_result}.txt','w')
+    f = open(f'carnum.txt','w')
     f.write(read_result)
     f.close()
-        # 여기서 boto3 바로 쓰면 굳이 저장안해도됨 서버에 ?
-
-
-#크롭 이미지 저장된거 덮어쓰기 됨?
+    #s3.upload_file(recently('./txtresult'), bucket,recently('./txtresult'))
+    #s3.upload_file('carnum.txt', bucket,recently('./txtresult'))
+        # run 할때마다 carnum 덮어쓰기 되서 이거 S3로 보내주믄됨?
+        # 그럼 s3에서도 한개의 파일에서 계속 덮어쓰기 인식 가능(최신파일 가져올 필요가 없음)
+        # boto3 업로드 할때도 덮어쓰기 되니까 상관없음 
 
 
 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
@@ -52,8 +55,7 @@ model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_r
 img = Image.open(recently('./input_img/')) # PIL
 img = img.filter(ImageFilter.GaussianBlur(radius =1))
 
-# 이미지 크롭 
-results = model(img, size=640)
+results = model(img, size=640) # 이미지 크롭 
 df = results.pandas().xyxy[0]
 crops = results.crop(save=False)
 # conf = (crop[0]['conf'].item() * 100)
@@ -63,7 +65,9 @@ for num, crop in enumerate(crops) :
         image = crop['im']
         im = Image.fromarray(image)   
         im.save(os.path.join(path, f'plate_{img}.png'), 'png',dpi=(300,300))
-
+        
+        #여기서도 파일명 넘버링 안해주면 덮어쓰기됨 굳이 저장유지할 필요가 있나?? 
+    #크롭 이미지 저장된거 덮어쓰기 됨?
 #가장 최근 생성된 Crops 결과 이미지 easy_ocr 함수 읽기 
 #실행부 
 easy_ocr(recently('./crops/'))
