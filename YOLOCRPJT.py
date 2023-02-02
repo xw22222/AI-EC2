@@ -1,4 +1,4 @@
-## 프로젝트 run 용 YOLOCR : 이거만 짜면됨 
+## 프로젝트 run 용 YOLOCR /// cron 자동실행 진행중
 import boto3
 import os, sys, time
 import warnings
@@ -13,7 +13,7 @@ S3 = boto3.client('s3')
 bucket = '1iotjj'
 path = './crops'
 
-# 가장 최근 생성된 파일을 리턴하는 함수 : 짠거
+# 가장 최근 생성된 파일을 리턴하는 함수 
 def recently(folder_path) :
     each_file_path_and_gen_time = []
     for each_file_name in os.listdir(folder_path):
@@ -27,7 +27,7 @@ def recently(folder_path) :
     return max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
 
 
-# OCR 결과 읽는 부분 차량번호만 .txt파일로 저장 예정 -> boto3 s3 
+# OCR 결과 읽고 차량번호 저장해서 S3반환 함수
 def easy_ocr (path) :
     reader = easyocr.Reader(['ko'], gpu=True)
     result = reader.readtext(path)
@@ -43,7 +43,7 @@ def easy_ocr (path) :
     f = open(f'carnum.txt','w') # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음
     f.write(read_result)
     f.close()
-    S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt')
+    S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt') #S3/carnum dir에 carnum.txt로 업로드 
 
 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
@@ -63,9 +63,8 @@ for num, crop in enumerate(crops) :
         im = Image.fromarray(image)   
         im.save(os.path.join(path, f'plate_result.png'), 'png',dpi=(300,300))
         
-    # 파일명 넘버링 안해주면 덮어쓰기됨 굳이 crop결과 저장유지할 필요가 있나?? 
-    #크롭 이미지 저장된거 덮어쓰기 됨?
-
+    # 굳이 crop결과 쌓아서 유지 할 필요가 있는가?? -> 덮어쓰자
+    # Plate_result.png : 차량이미지에서 번호판 부분만 추출된 이미지
 
 #가장 최근 생성된 Crops 결과 이미지 easy_ocr 함수 읽기 
 #실행부 
