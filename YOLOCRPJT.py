@@ -36,17 +36,15 @@ def easy_ocr (path) :
     print("===== Crop Image OCR Read - Easy ======")
     print(f'Easy OCR 결과     : {read_result}')
     print(f'Easy OCR 확률     : {read_confid}%')
-    print(" 추출 결과 save : carum.txt ")
-    print(" AWS S3 Upload path : 1iotjj/carnum")
+    print("Easy ocr 결과 save : carum.txt ")
+    print("AWS S3 Upload path : 1iotjj/carnum")
+    print("=======================================")
     #f = open(f'{read_result}.txt','w')
-    f = open(f'carnum.txt','w') # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요없기때문
+    f = open(f'carnum.txt','w') # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음
     f.write(read_result)
     f.close()
     S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt')
 
-    #s3.upload_file(recently('./txtresult'), bucket,recently('./txtresult'))
-    #s3.upload_file(f'carnum.txt' , bucket,'%s/%s' % (carnum/, object_name=None))
-    #s3.upload_file(file_path,bucket_name, '%s/%s' % (bucket_folder,dest_file_name))
 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
 
@@ -63,11 +61,12 @@ for num, crop in enumerate(crops) :
     if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
         image = crop['im']
         im = Image.fromarray(image)   
-        im.save(os.path.join(path, f'plate_{img}.png'), 'png',dpi=(300,300))
+        im.save(os.path.join(path, f'plate_result.png'), 'png',dpi=(300,300))
         
-        #여기서도 파일명 넘버링 안해주면 덮어쓰기됨 굳이 저장유지할 필요가 있나?? 
+    # 파일명 넘버링 안해주면 덮어쓰기됨 굳이 crop결과 저장유지할 필요가 있나?? 
     #크롭 이미지 저장된거 덮어쓰기 됨?
+
+
 #가장 최근 생성된 Crops 결과 이미지 easy_ocr 함수 읽기 
 #실행부 
 easy_ocr(recently('./crops/'))
-#s3.upload_file(recently('./txtresult'), bucket,recently('./txtresult'))
