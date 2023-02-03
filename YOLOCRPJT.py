@@ -50,6 +50,8 @@ img = Image.open(recently('./input_img/')) # PIL
 img = img.filter(ImageFilter.GaussianBlur(radius =1))
 
 results = model(img, size=640) # 이미지 크롭 
+
+
 df = results.pandas().xyxy[0]
 crops = results.crop(save=False)
 # conf = (crop[0]['conf'].item() * 100)
