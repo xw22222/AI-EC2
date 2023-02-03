@@ -20,9 +20,8 @@ if __name__ == "__main__":
     my_event_handler = PatternMatchingEventHandler(patterns, ignore_patterns, ignore_directories, case_sensitive)
 
 def on_created(event):
-    if event.is_file :
-        YOLOV(input_path) 
-        easy_ocr(recently(crop_path))
+    YOLOV(event.input_path) 
+    easy_ocr(recently(crop_path))
 
     """
     if event.src_path == True :
