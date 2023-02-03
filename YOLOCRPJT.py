@@ -7,7 +7,6 @@ warnings.filterwarnings("ignore", category=UserWarning)
 import torch
 from PIL import Image, ImageFilter
 import easyocr
-import pytesseract
 
 S3 = boto3.client('s3')
 bucket = '1iotjj'
@@ -25,7 +24,6 @@ def recently(folder_path) :
     )
     # 가장 생성시각이 큰(가장 최근인) 파일을 리턴 
     return max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
-
 
 # OCR 결과 읽고 차량번호 저장해서 S3반환 함수
 def easy_ocr (path) :
@@ -47,7 +45,6 @@ def easy_ocr (path) :
 
 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
-
 # 가장 최근 생성된 차량 이미지 읽기 
 img = Image.open(recently('./input_img/')) # PIL
 img = img.filter(ImageFilter.GaussianBlur(radius =1))

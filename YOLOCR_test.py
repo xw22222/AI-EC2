@@ -6,7 +6,6 @@ warnings.filterwarnings("ignore", category=UserWarning)
 import torch
 from PIL import Image, ImageFilter
 import easyocr
-import pytesseract
 import boto3
 
 #S3 = boto3.client('s3')
@@ -86,7 +85,6 @@ def YOLOV1(path) :
 # 1차 crop된 이미지 path : test_crops1
 # yolo ModelV2 load : 2차 모델 루트 dir : ./yolov5s.pt // 준호님이 주신 프로젝트에서 : runs/train/exp2/weights/best.pt뽑아서
 # 배포 프로젝트(여기)./ 루트경로에 삽입 -> name : V2.pt
-
 def YOLOV2(path) : # ./test_crops2 dir 생성 요
     model = torch.hub.load('ultralytics/yolov5', 'custom', path='./V2.pt', force_reload=True)
     # 가장 최근 생성된 차량 이미지 읽기 
@@ -95,13 +93,13 @@ def YOLOV2(path) : # ./test_crops2 dir 생성 요
     #results = model(img, size=640) # 이미지 크롭 
     results = model(img) 
     df = results.pandas().xyxy[0]
-    crops = results.crop(save=True) # Crop save 까진 됨  이아래 부분에서 V2결과 저장이 안되고있음
+    crops = results.crop(save=True) # Crop save 까진 됨  이아래 부분에서 V2결과 저장이 안되고있음? ##음..
     for num, crop in enumerate(crops) :
         if 'plate' in crop['label'] and crop['conf'].item() * 100 > 0 : # 100>0 수정
             image = crop['im']
             im = Image.fromarray(image)   
             im.save(os.path.join(V2_result_path , f'V2결과.png'), 'png',dpi=(300,300))
-            # V2결과.png : 차량이미지에서 번호판 부분만 추출된 이미지에서 숫자를 검출 하는거 까지
+            # V2결과.png : 차량이미지에서 번호판 부분만 추출된 이미지에서 모델2가 숫자를 검출 하는거 까지
 
 
 # 실행부
