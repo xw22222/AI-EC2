@@ -67,5 +67,5 @@ for num, crop in enumerate(crops) :
 
 #가장 최근 생성된 Crops 결과 이미지 easy_ocr 함수 읽기 
 #실행부 
-s3.download_file(bucket, recently('carnum/'), f"car_img.jpg")
+S3.download_file(bucket, recently('carnum/'), f"car_img.jpg")
 easy_ocr(recently('./crops/'))
