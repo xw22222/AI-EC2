@@ -7,12 +7,16 @@ warnings.filterwarnings("ignore", category=UserWarning)
 import torch
 from PIL import Image, ImageFilter
 import easyocr
+from cloudpathlib import CloudPath
 
 S3 = boto3.client('s3')
 bucket = '1iotjj'
 path = './crops'
-
-# 가장 최근 생성된 파일을 리턴하는 함수 
+input_path = './input_img/'
+cp = CloudPath("s3://1iotjj/media/")
+cp.download_to(input_path)
+# 가장 최근 생성된 파일을 리턴하는 함수
+#  
 def recently(folder_path) :
     each_file_path_and_gen_time = []
     for each_file_name in os.listdir(folder_path):
@@ -46,7 +50,7 @@ def easy_ocr (path) :
 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
 # 가장 최근 생성된 차량 이미지 읽기 
-img = Image.open(recently('./input_img/')) # PIL
+img = Image.open(recently(input_path)) # PIL
 img = img.filter(ImageFilter.GaussianBlur(radius =1))
 
 results = model(img, size=640) # 이미지 크롭 
@@ -67,5 +71,6 @@ for num, crop in enumerate(crops) :
 
 #가장 최근 생성된 Crops 결과 이미지 easy_ocr 함수 읽기 
 #실행부 
-S3.download_file(bucket, recently('media/') + f"car_img.jpg")
+
+
 easy_ocr(recently('./crops/'))

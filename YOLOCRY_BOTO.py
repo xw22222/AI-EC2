@@ -6,11 +6,14 @@ warnings.filterwarnings("ignore", category=UserWarning)
 from PIL import Image, ImageFilter
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
+from cloudpathlib import CloudPath
 
 S3 = boto3.client('s3')
 bucket = '1iotjj'
 crop_path = './crops'
 input_path = './input_img/'
+cp = CloudPath("s3://1iotjj/media/")
+cp.download_to(input_path)
 
 if __name__ == "__main__":
     patterns = ["*"]
@@ -42,12 +45,6 @@ def recently(folder_path) : # 가장 최근 생성된 파일을 리턴하는 함
     )
     # 가장 생성시각이 큰(가장 최근인) 파일을 리턴 
     return max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
-
-
-
-s3.download_file(bucket, recently('carnum/'),"car_img.jpg")
-
-#s3.download_file('버켓이름','버켓하위 경로를 포함한 s3속 파일이름',"로컬에 저장할때 파일이름")
 
 # OCR 결과 읽고 차량번호 저장해서 S3반환 함수
 def easy_ocr (path) :
