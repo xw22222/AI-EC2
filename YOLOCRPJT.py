@@ -37,8 +37,8 @@ def easy_ocr (path) :
     print("Easy ocr 결과 save : carum.txt ")
     print("AWS S3 Upload path : 1iotjj/carnum")
     print("=======================================")
-    #f = open(f'{read_result}.txt','w')
-    f = open(f'carnum.txt','w') # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음
+    f = open(f'{read_result}.txt','w')
+    #f = open(f'carnum.txt','w') # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음
     f.write(read_result)
     f.close()
     S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt') #S3/carnum dir에 carnum.txt로 업로드 
