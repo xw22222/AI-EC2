@@ -13,11 +13,10 @@ S3 = boto3.client('s3')
 bucket = '1iotjj'
 path = './crops'
 input_path = './input_img/'
-output_path = './out_txt'
 
+cp = CloudPath("s3://1iotjj/test_media/")
+cp.download_to(input_path)                  # 데몬 따로 돌리기 
 
-cp = CloudPath("s3://1iotjj/media/")
-#cp.download_to(input_path)
 
 
 # 가장 최근 생성된 파일을 리턴하는 함수 
@@ -32,23 +31,13 @@ def recently(folder_path) :
     )
     # 가장 생성시각이 큰(가장 최근인) 파일을 리턴 
     return max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
-"""
-def out_txt(path):
-    botoup_name = recently(input_path)
-    f = open(f'{botoup_name}.txt')
-"""
+
 
 # OCR 결과 읽고 차량번호 저장해서 S3반환 함수
-"""
-def filename(path):
-    input = recently(path)
-    result = os.path.basename(input)
-    return result
-"""
-
 def easy_ocr (path) :
-    input = recently(input_path)
-    resultname = os.path.basename(input)
+    input = recently(input_path) # 가장 최근 수신된 이미지를 받는 변수 input
+    resultname = os.path.basename(input)   # 여기서 이름만 가져옴 resultname으로 # 버킷에 올릴때만 필요 
+
     reader = easyocr.Reader(['ko'], gpu=True)
     result = reader.readtext(path)
     read_result = result[0][1]
@@ -59,31 +48,10 @@ def easy_ocr (path) :
     print(f"Easy ocr 결과 save : {read_result}.txt ")
     print("AWS S3 Upload path : 1iotjj/carnum")
     print("=======================================")
-    #read = recently(input_path)
-    # f = open("C:/doit/새파일.txt", 'w')
-    #f = open(f'{resultname}.txt','w')
-    #f = open(recently(input_path).txt,'w')
-    f = open(f'carnum.txt','w')
-    #f = open(output_path/f'{recently(input_path)}','w') # run 할때 마다 덮어쓰기 루트파일에서
-    #f = open(os.path.join(output_path, f'{botoup_name}.txt', 'w')) # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
+    f = open(f'carnum.txt','w')    # carnum으로 결과 저장 # run 할때 마다 덮어쓰기 루트파일에서
     f.write(read_result)
     f.close()
-    S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'{resultname}.txt') #S3/carnum dir에 최근입차번호.txt로 업로드
-
-    #os.remove('/abc/test.text')
-    
-    #os.rename('carnum.txt',f'{recently(input_path)}.txt')
-    # f.save(os.path.join(output_path , f'{botoup_name}.txt'), 'txt')
-    #S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드 
-    #S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt') #S3/carnum dir에 carnum.txt로 업로드 
-
-    """
-def boto3_upload(path) :
-    f.save(os.path.join(output_path , f'{botoup_name}.txt'), 'txt')
-    S3.upload_file(f, bucket,'carnum/'+ f) #S3/carnum dir에 최근입차번호.txt로 업로드 
-
-    """
-
+    S3.upload_file(f'carnum.txt', bucket,'test_carnum/'+ f'{resultname}.txt') #S3/carnum dir에 최근입차번호.txt로 업로드
 
 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
