@@ -14,6 +14,8 @@ bucket = '1iotjj'
 path = './crops'
 input_path = './input_img/'
 output_path = './out_txt'
+
+
 cp = CloudPath("s3://1iotjj/media/")
 cp.download_to(input_path)
 
@@ -37,10 +39,9 @@ def out_txt(path):
 """
 
 # OCR 결과 읽고 차량번호 저장해서 S3반환 함수
-
+botoup_name = recently(input_path)
 
 def easy_ocr (path) :
-    botoup_name = recently(input_path)
     reader = easyocr.Reader(['ko'], gpu=True)
     result = reader.readtext(path)
     read_result = result[0][1]
@@ -58,8 +59,8 @@ def easy_ocr (path) :
     f.write(read_result)
     f.close()
     # f.save(os.path.join(output_path , f'{botoup_name}.txt'), 'txt')
-    S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드 
-
+    #S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드 
+    #S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt') #S3/carnum dir에 carnum.txt로 업로드 
 
     """
 def boto3_upload(path) :
