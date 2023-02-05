@@ -48,8 +48,7 @@ def filename(path):
 
 def easy_ocr (path) :
     input = recently(input_path)
-    result = os.path.basename(input)
-
+    resultname = os.path.basename(input)
     reader = easyocr.Reader(['ko'], gpu=True)
     result = reader.readtext(path)
     read_result = result[0][1]
@@ -62,14 +61,14 @@ def easy_ocr (path) :
     print("=======================================")
     #read = recently(input_path)
     # f = open("C:/doit/새파일.txt", 'w')
-    f = open(f'{result}.txt','w')
+    #f = open(f'{resultname}.txt','w')
     #f = open(recently(input_path).txt,'w')
-    #f = open(f'carnum.txt','w')
+    f = open(f'carnum.txt','w')
     #f = open(output_path/f'{recently(input_path)}','w') # run 할때 마다 덮어쓰기 루트파일에서
     #f = open(os.path.join(output_path, f'{botoup_name}.txt', 'w')) # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
     f.write(read_result)
     f.close()
-    S3.upload_file(f'{result}.txt', bucket,'carnum/'+ f'{result}.txt') #S3/carnum dir에 최근입차번호.txt로 업로드
+    S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'{resultname}.txt') #S3/carnum dir에 최근입차번호.txt로 업로드
 
     #os.remove('/abc/test.text')
     
