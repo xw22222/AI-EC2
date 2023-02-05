@@ -17,7 +17,7 @@ output_path = './out_txt'
 
 
 cp = CloudPath("s3://1iotjj/media/")
-cp.download_to(input_path)
+#cp.download_to(input_path)
 
 
 # 가장 최근 생성된 파일을 리턴하는 함수 
@@ -39,8 +39,17 @@ def out_txt(path):
 """
 
 # OCR 결과 읽고 차량번호 저장해서 S3반환 함수
+"""
+def filename(path):
+    input = recently(path)
+    result = os.path.basename(input)
+    return result
+"""
 
 def easy_ocr (path) :
+    input = recently(input_path)
+    result = os.path.basename(input)
+
     reader = easyocr.Reader(['ko'], gpu=True)
     result = reader.readtext(path)
     read_result = result[0][1]
@@ -53,14 +62,14 @@ def easy_ocr (path) :
     print("=======================================")
     #read = recently(input_path)
     # f = open("C:/doit/새파일.txt", 'w')
-    f = open(f'{recently(input_path)}.txt','w')
+    f = open(f'{result}.txt','w')
     #f = open(recently(input_path).txt,'w')
     #f = open(f'carnum.txt','w')
     #f = open(output_path/f'{recently(input_path)}','w') # run 할때 마다 덮어쓰기 루트파일에서
     #f = open(os.path.join(output_path, f'{botoup_name}.txt', 'w')) # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
     f.write(read_result)
     f.close()
-    S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드
+    S3.upload_file(f'{result}.txt', bucket,'carnum/'+ f'{result}.txt') #S3/carnum dir에 최근입차번호.txt로 업로드
 
     #os.remove('/abc/test.text')
     
