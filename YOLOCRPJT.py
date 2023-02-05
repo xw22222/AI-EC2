@@ -51,7 +51,7 @@ def easy_ocr (path) :
     print(f"Easy ocr 결과 save : {read_result}.txt ")
     print("AWS S3 Upload path : 1iotjj/carnum")
     print("=======================================")
-    f = open("C:/doit/새파일.txt", 'w')
+    #f = open("C:/doit/새파일.txt", 'w')
     f = open(f'./out_txt/{recently(input_path)}.txt','w')
     #f = open(f'carnum.txt','w')
     #f = open(output_path/f'{recently(input_path)}','w') # run 할때 마다 덮어쓰기 루트파일에서
