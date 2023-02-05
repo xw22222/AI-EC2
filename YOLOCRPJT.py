@@ -37,9 +37,6 @@ def out_txt(path):
 """
 
 # OCR 결과 읽고 차량번호 저장해서 S3반환 함수
-#def boto3_upload(path) :
-    
-
 
 
 def easy_ocr (path) :
@@ -54,13 +51,23 @@ def easy_ocr (path) :
     print(f"Easy ocr 결과 save : {read_result}.txt ")
     print("AWS S3 Upload path : 1iotjj/carnum")
     print("=======================================")
-    #f = open(f'{read_result}.txt','w')
+    f = open(f'{botoup_name}.txt','w')
+    #f = open(f'carnum.txt','w')
     #f = open(output_path/f'{recently(input_path)}','w') # run 할때 마다 덮어쓰기 루트파일에서
-    f = open(os.path.join(output_path, f'{botoup_name}.txt', 'w')) # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
+    #f = open(os.path.join(output_path, f'{botoup_name}.txt', 'w')) # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
     f.write(read_result)
     f.close()
-    #f.save(os.path.join(output_path , f), 'txt')
+   # f.save(os.path.join(output_path , f'{botoup_name}.txt'), 'txt')
     S3.upload_file(f, bucket,'carnum/'+ f) #S3/carnum dir에 최근입차번호.txt로 업로드 
+
+
+    """
+def boto3_upload(path) :
+    f.save(os.path.join(output_path , f'{botoup_name}.txt'), 'txt')
+    S3.upload_file(f, bucket,'carnum/'+ f) #S3/carnum dir에 최근입차번호.txt로 업로드 
+
+    """
+
 
 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
