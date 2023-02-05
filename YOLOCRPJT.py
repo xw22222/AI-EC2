@@ -15,7 +15,7 @@ path = './crops'
 input_path = './input_img/'
 
 cp = CloudPath("s3://1iotjj/test_media/")
-cp.download_to(input_path)                  # 데몬 따로 돌리기 
+#cp.download_to(input_path)                  # 데몬 따로 돌리기 test용 
 
 
 
@@ -45,7 +45,7 @@ def easy_ocr (path) :
     print("===== Crop Image OCR Read - Easy ======")
     print(f'Easy OCR 결과     : {read_result}')
     print(f'Easy OCR 확률     : {read_confid}%')
-    print(f"Easy ocr 결과 save : {read_result}.txt ")
+    print(f"Easy ocr 결과 save : {resultname}.txt ")
     print("AWS S3 Upload path : 1iotjj/carnum")
     print("=======================================")
     f = open(f'carnum.txt','w')    # carnum으로 결과 저장 # run 할때 마다 덮어쓰기 루트파일에서
