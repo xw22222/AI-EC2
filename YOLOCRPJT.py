@@ -51,8 +51,9 @@ def easy_ocr (path) :
     print(f"Easy ocr 결과 save : {read_result}.txt ")
     print("AWS S3 Upload path : 1iotjj/carnum")
     print("=======================================")
+    read = recently(input_path)
     #f = open("C:/doit/새파일.txt", 'w')
-    f = open(f'./out_txt/{recently(input_path)}.txt','w')
+    f = open(f'./out_txt/{read}.txt','w')
     #f = open(f'carnum.txt','w')
     #f = open(output_path/f'{recently(input_path)}','w') # run 할때 마다 덮어쓰기 루트파일에서
     #f = open(os.path.join(output_path, f'{botoup_name}.txt', 'w')) # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
