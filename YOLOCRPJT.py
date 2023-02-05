@@ -39,7 +39,6 @@ def out_txt(path):
 """
 
 # OCR 결과 읽고 차량번호 저장해서 S3반환 함수
-botoup_name = recently(input_path)
 
 def easy_ocr (path) :
     reader = easyocr.Reader(['ko'], gpu=True)
@@ -52,7 +51,7 @@ def easy_ocr (path) :
     print(f"Easy ocr 결과 save : {read_result}.txt ")
     print("AWS S3 Upload path : 1iotjj/carnum")
     print("=======================================")
-    f = open(f'{botoup_name}.txt','w')
+    f = open(f'{recently(input_path)}.txt','w')
     #f = open(f'carnum.txt','w')
     #f = open(output_path/f'{recently(input_path)}','w') # run 할때 마다 덮어쓰기 루트파일에서
     #f = open(os.path.join(output_path, f'{botoup_name}.txt', 'w')) # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
