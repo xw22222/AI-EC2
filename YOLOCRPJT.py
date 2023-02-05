@@ -61,12 +61,12 @@ def easy_ocr (path) :
     f.write(read_result)
     f.close()
     S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드
-    
+
     #os.remove('/abc/test.text')
     
     #os.rename('carnum.txt',f'{recently(input_path)}.txt')
     # f.save(os.path.join(output_path , f'{botoup_name}.txt'), 'txt')
-    S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드 
+    #S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드 
     #S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt') #S3/carnum dir에 carnum.txt로 업로드 
 
     """
