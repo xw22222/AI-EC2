@@ -13,9 +13,10 @@ S3 = boto3.client('s3')
 bucket = '1iotjj'
 path = './crops'
 input_path = './input_img/'
-output_path = './out_txt'
+#output_path = './out_txt'
 cp = CloudPath("s3://1iotjj/media/")
 cp.download_to(input_path)
+
 
 # 가장 최근 생성된 파일을 리턴하는 함수 
 def recently(folder_path) :
@@ -30,8 +31,10 @@ def recently(folder_path) :
     # 가장 생성시각이 큰(가장 최근인) 파일을 리턴 
     return max(each_file_path_and_gen_time, key=lambda x: x[1])[0]
 
+
 # OCR 결과 읽고 차량번호 저장해서 S3반환 함수
 def easy_ocr (path) :
+    botoup_name = recently(input_path)
     reader = easyocr.Reader(['ko'], gpu=True)
     result = reader.readtext(path)
     read_result = result[0][1]
@@ -43,12 +46,13 @@ def easy_ocr (path) :
     print("AWS S3 Upload path : 1iotjj/carnum")
     print("=======================================")
     #f = open(f'{read_result}.txt','w')
-    f = open(output_path/f'{recently(input_path)}','w') # run 할때 마다 덮어쓰기 루트파일에서
-    #f = open(f'carnum.txt','w') # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
+    #f = open(output_path/f'{recently(input_path)}','w') # run 할때 마다 덮어쓰기 루트파일에서
+    f = open(f'carnum.txt','w') # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
     f.write(read_result)
     f.close()
     #S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'{recently(input_path)}.txt') #S3/carnum dir에 최근입차번호.txt로 업로드 
-    S3.upload_file(f, bucket,'carnum/'+ f'.txt') #S3/carnum dir에 최근입차번호.txt로 업로드 
+    #S3.upload_file(f, bucket,'carnum/'+ f'.txt') #S3/carnum dir에 최근입차번호.txt로 업로드 
+    S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'{recently(botoup_name)}.txt') #S3/carnum dir에 carnum.txt로 업로드 
 
 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
