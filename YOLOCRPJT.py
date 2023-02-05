@@ -53,7 +53,6 @@ def easy_ocr (path) :
     print("=======================================")
     #read = recently(input_path)
     # f = open("C:/doit/새파일.txt", 'w')
-    os.chdir(output_path)
     f = open(f'{recently(input_path)}.txt','w')
     #f = open(recently(input_path).txt,'w')
     #f = open(f'carnum.txt','w')
@@ -62,7 +61,8 @@ def easy_ocr (path) :
     f.write(read_result)
     f.close()
     #os.rename('carnum.txt',f'{recently(input_path)}.txt')
-    #shutil.move(f, "/tmp/my_test_moved.txt")
+    shutil.move(f, f"./out_txt/{f}")
+    
     # f.save(os.path.join(output_path , f'{botoup_name}.txt'), 'txt')
     #S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드 
     #S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt') #S3/carnum dir에 carnum.txt로 업로드 
