@@ -52,7 +52,7 @@ def easy_ocr (path) :
     f.close()
     #S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'{recently(input_path)}.txt') #S3/carnum dir에 최근입차번호.txt로 업로드 
     #S3.upload_file(f, bucket,'carnum/'+ f'.txt') #S3/carnum dir에 최근입차번호.txt로 업로드 
-    S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'{recently(botoup_name)}.txt') #S3/carnum dir에 carnum.txt로 업로드 
+    S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'{botoup_name}.txt') #S3/carnum dir에 carnum.txt로 업로드 
 
 # yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir : ./best.pt
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
