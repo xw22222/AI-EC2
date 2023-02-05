@@ -54,9 +54,9 @@ def easy_ocr (path) :
     #read = recently(input_path)
     # f = open("C:/doit/새파일.txt", 'w')
 
-    
-    #f = open(f'{recently(input_path)}.txt','w')
-    f = open(recently(input_path).txt,'w')
+
+    f = open(f'./out_txt/{recently(input_path)}.txt','w')
+   # f = open(recently(input_path).txt,'w')
 
 
     #f = open(f'carnum.txt','w')
