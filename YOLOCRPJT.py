@@ -57,8 +57,8 @@ def easy_ocr (path) :
     #f = open(os.path.join(output_path, f'{botoup_name}.txt', 'w')) # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
     f.write(read_result)
     f.close()
-   # f.save(os.path.join(output_path , f'{botoup_name}.txt'), 'txt')
-    S3.upload_file(f, bucket,'carnum/'+ f) #S3/carnum dir에 최근입차번호.txt로 업로드 
+    # f.save(os.path.join(output_path , f'{botoup_name}.txt'), 'txt')
+    S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드 
 
 
     """
