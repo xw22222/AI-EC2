@@ -60,11 +60,13 @@ def easy_ocr (path) :
     #f = open(os.path.join(output_path, f'{botoup_name}.txt', 'w')) # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음 
     f.write(read_result)
     f.close()
-    #os.rename('carnum.txt',f'{recently(input_path)}.txt')
-    shutil.move(f, f"./out_txt/{f}")
+    S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드
     
+    #os.remove('/abc/test.text')
+    
+    #os.rename('carnum.txt',f'{recently(input_path)}.txt')
     # f.save(os.path.join(output_path , f'{botoup_name}.txt'), 'txt')
-    #S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드 
+    S3.upload_file(f, bucket,'carnum/'+ f'f') #S3/carnum dir에 최근입차번호.txt로 업로드 
     #S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt') #S3/carnum dir에 carnum.txt로 업로드 
 
     """
