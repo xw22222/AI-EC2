@@ -1,6 +1,4 @@
-#! /home/ubuntu/myvenv/bin/python
-
-## 프로젝트 run 용 YOLOCR /// cron 자동실행 진행중
+#!/home/ubuntu/myvenv/bin/python
 import boto3
 from cloudpathlib import CloudPath
 import os, sys, time, shutil
@@ -9,5 +7,8 @@ S3 = boto3.client('s3')
 bucket = '1iotjj'
 crop_path = './crops'
 input_path = './input_img/'
+
 cp = CloudPath("s3://1iotjj/test_media/")
-cp.download_to(input_path)
+
+while True :
+    cp.download_to(input_path)
