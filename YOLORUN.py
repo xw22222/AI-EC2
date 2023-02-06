@@ -1,37 +1,17 @@
 ## 프로젝트 run 용 YOLOCR /// cron 자동실행 진행중
-import boto3, easyocr, torch
-import os, sys, time, warnings
-os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-warnings.filterwarnings("ignore", category=UserWarning)
+import boto3
+import os, sys
+import torch
 from PIL import Image, ImageFilter
-from watchdog.observers import Observer
-from watchdog.events import PatternMatchingEventHandler
+import easyocr
+from cloudpathlib import CloudPath
 
 S3 = boto3.client('s3')
 bucket = '1iotjj'
-crop_path = './crops'
 input_path = './input_img/'
 
-if __name__ == "__main__":
-    patterns = ["*"]
-    ignore_patterns = None
-    ignore_directories = False
-    case_sensitive = True
-    my_event_handler = PatternMatchingEventHandler(patterns, ignore_patterns, ignore_directories, case_sensitive)
-
-def on_created(event):
-    event.YOLOV(input_path) 
-    event.easy_ocr(recently(crop_path))
-
-    """
-    if event.src_path == True :
-        YOLOV(input_path) 
-        easy_ocr(recently(crop_path))
-        #print(f"hey, {event.src_path} has been created!")
-    else :
-        print("입차 차량 없음")
-    """    
-def recently(folder_path) : # 가장 최근 생성된 파일을 리턴하는 함수 
+# 가장 최근 생성된 파일을 리턴하는 함수 
+def recently(folder_path) :
     each_file_path_and_gen_time = []
     for each_file_name in os.listdir(folder_path):
     # getctime: 입력받은 경로에 대한 생성 시간을 리턴
@@ -45,6 +25,9 @@ def recently(folder_path) : # 가장 최근 생성된 파일을 리턴하는 함
 
 # OCR 결과 읽고 차량번호 저장해서 S3반환 함수
 def easy_ocr (path) :
+    input = recently(input_path) # 가장 최근 수신된 이미지를 받는 변수 input
+    resultname = os.path.basename(input)   # 여기서 이름만 가져옴 resultname으로 # 버킷에 올릴때만 필요 
+
     reader = easyocr.Reader(['ko'], gpu=True)
     result = reader.readtext(path)
     read_result = result[0][1]
@@ -52,16 +35,15 @@ def easy_ocr (path) :
     print("===== Crop Image OCR Read - Easy ======")
     print(f'Easy OCR 결과     : {read_result}')
     print(f'Easy OCR 확률     : {read_confid}%')
-    print("Easy ocr 결과 save : carum.txt ")
+    print(f"Easy ocr 결과 save : {resultname}.txt ")
     print("AWS S3 Upload path : 1iotjj/carnum")
     print("=======================================")
-    f = open(f'{read_result}.txt','w')
-    f = open(f'carnum.txt','w') # run 할때 마다 덮어쓰기 -> S3 그대로 덮어쓰기/ 파일 유지 필요 없음
+    f = open(f'carnum.txt','w')    # carnum으로 결과 저장 # run 할때 마다 덮어쓰기 루트파일에서
     f.write(read_result)
     f.close()
-    S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'carnum.txt') #S3/carnum dir에 carnum.txt로 업로드 
+    S3.upload_file(f'carnum.txt', bucket,'test_carnum/'+ f'{resultname}.txt') #S3/carnum dir에 최근입차번호.txt로 업로드
 
-def YOLOV(path) :
+def YOLO(path) :
     model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
     # 가장 최근 생성된 차량 이미지 읽기 
     img = Image.open(recently(path)) # PIL
@@ -74,23 +56,17 @@ def YOLOV(path) :
             # if 'plate' in crop['label'] and crop['conf'].item() 
             image = crop['im']
             im = Image.fromarray(image)   
-            im.save(os.path.join(crop_path , f'크롭결과.png'), 'png',dpi=(300,300))
+            im.save(os.path.join('./crops' , f'plate_result.png'), 'png',dpi=(300,300))
             # V1결과.png : 차량이미지에서 번호판 부분만 추출된 이미지
 
-my_event_handler.on_created = on_created
 
-path = './input_img/'
-
-go_recursively = True
-
-my_observer = Observer()
-
-my_observer.schedule(my_event_handler, path, recursive=go_recursively)
-
-my_observer.start()
-try:
-    while True:
-        time.sleep(1)
-except KeyboardInterrupt:
-    my_observer.stop()
-    my_observer.join()
+while True :
+    compare1 = recently(input_path)
+    cp = CloudPath("s3://1iotjj/test_media/")
+    cp.download_to(input_path)             
+    compare2 = recently(input_path)
+    if compare1 == compare2 :
+        print("no")
+    else :
+        YOLO(input_path)
+        easy_ocr(recently('./crops/'))

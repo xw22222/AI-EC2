@@ -1,4 +1,4 @@
-#!/home/ubuntu/myvenv/bin/python
+# NO hub 백그라운드 상시 실행 
 import boto3
 from cloudpathlib import CloudPath
 import os, sys, time, shutil
