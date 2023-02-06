@@ -16,9 +16,6 @@ input_path = './input_img/'
 
 cp = CloudPath("s3://1iotjj/test_media/")
 #cp.download_to(input_path)                  # 데몬 따로 돌리기 test용 
-
-
-
 # 가장 최근 생성된 파일을 리턴하는 함수 
 def recently(folder_path) :
     each_file_path_and_gen_time = []
