@@ -1,4 +1,4 @@
-## YOLO 모델 V2 Run용 
+## 빅데이터반 요청 : YOLO V1 + V2 = 결론 : V2 모델 학습이 V1결과 이미지를 못읽음(안됨)  
 import os, sys, time
 import warnings
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -103,7 +103,6 @@ def YOLOV2(path) : # ./test_crops2 dir 생성 요
 
 
 # 실행부
-
 YOLOV1(V1_path)
 YOLOV2(V2_input_path)
 easy_ocr_origin(recently(V2_input_path))
