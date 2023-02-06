@@ -66,7 +66,7 @@ while True :
     cp.download_to(input_path)             
     compare2 = recently(input_path)
     if compare1 == compare2 :
-        print("no")
+        None
     else :
         YOLO(input_path)
         easy_ocr(recently('./crops/'))
