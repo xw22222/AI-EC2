@@ -63,7 +63,7 @@ def YOLO(path) :
 #---------------------------------------funcions-----------------------------------------#
 # 실행부 
 # 실행 코드 무한루프
-
+# run할때 : 루트 dir / 버킷dir 샘플 이미지 한개씩 넣어둬야됨 
 while True :
     compare1 = recently(input_path)   # 먼저 현재 input_img경로의 사진중 최근 이미지를 변수에 저장
     cp = CloudPath("s3://1iotjj/test_media/")
