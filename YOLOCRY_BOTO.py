@@ -1,6 +1,9 @@
+#! /home/ubuntu/myvenv/bin/python
+
 ## 프로젝트 run 용 YOLOCR /// cron 자동실행 진행중
 import boto3
 from cloudpathlib import CloudPath
+import os, sys, time, shutil
 
 S3 = boto3.client('s3')
 bucket = '1iotjj'
