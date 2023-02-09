@@ -1,4 +1,4 @@
-# NO hub으로  백그라운드 상시 실행 
+# ubuntu : ./input_img에 샘플 이미지 넣는용도 
 import boto3
 from cloudpathlib import CloudPath
 

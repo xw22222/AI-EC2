@@ -1,5 +1,5 @@
-## 프로젝트 최종 CODE 이거 + NOhub(백그라운드) : CPU많이 잡아 먹어서 웬만하면 돌리지말기
-## 진작 머리를 쓸걸.. cron/incron/ 모니터링(와치독) 다 필요없었음..
+## 프로젝트 최종 CODE  해당코드 NOhub(백그라운드)돌리기 : CPU많이 잡아 먹어서 시연때만 켜기
+## 머리를 씁시다 :  cron/incron/ 모니터링(와치독) 다 필요없었음.
 
 import boto3
 import os, sys
@@ -7,7 +7,6 @@ import torch
 from PIL import Image, ImageFilter
 import easyocr
 from cloudpathlib import CloudPath
-# 
 S3 = boto3.client('s3')
 bucket = '1iotjj'
 input_path = './input_img/'
@@ -42,7 +41,7 @@ def easy_ocr (path) :
     f = open(f'carnum.txt','w')    # carnum.txt 파일 생성 /.(루트)
     f.write(read_result) #OCR 결과부분만 쓰기 모드로 작성
     f.close()
-    S3.upload_file(f'carnum.txt', bucket,'test_carnum/'+ f'{resultname}.txt') #S3/carnum dir에 최근 input_img.txt로 업로드
+    S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'{resultname}.txt') #S3/carnum dir에 최근 input_img.txt로 업로드
 
 # YOLO 실행 함수 
 def YOLO(path) :
@@ -66,7 +65,7 @@ def YOLO(path) :
 # run할때 : 루트 dir / 버킷dir 샘플 이미지 한개씩 넣어둬야됨 
 while True :
     compare1 = recently(input_path)   # 먼저 현재 input_img경로의 사진중 최근 이미지를 변수에 저장
-    cp = CloudPath("s3://1iotjj/test_media/")
+    cp = CloudPath("s3://1iotjj/media/")
     cp.download_to(input_path)        # S3버킷에서 CP : 업로드된게 없으면 루트에도 없음(덮어쓰기)     
     compare2 = recently(input_path)   # CP 후 Input_img 경로의 사진중 최근 이미지를 변수에 저장
     if compare1 == compare2 :         # 두 값이 같으면 (실행 X)
