@@ -13,13 +13,10 @@ import matplotlib.pyplot as plt
 import PIL
 import numpy as np
 import linecache
-from google.colab.patches import cv2_imshow
 import pandas as pd
 import io
 from operator import itemgetter
-from google.colab import drive
-drive.mount('/content/drive')
-from operator import itemgetter
+
 
 
 S3 = boto3.client('s3')
@@ -64,13 +61,15 @@ img = Image.open(recently(input_path)) # PIL # 가장 최근 생성된 차량 �
 img = img.filter(ImageFilter.GaussianBlur(radius =1))
 results = model(img, size=640) # 이미지 크롭 
 df = results.pandas().xyxy[0]
-crops = results.crop(save=False) # 크롭 결과 none save 
+crops = results.crop(save=True) # 크롭 결과 none save 
 # conf = (crop[0]['conf'].item() * 100)
 for num, crop in enumerate(crops) :
     if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
         image = crop['im']
         im = Image.fromarray(image)   
         im.save(os.path.join(path, f'plate_result.png'), 'png',dpi=(300,300))
+
+easy_ocr(recently('./crops/'))
 
 
 """
@@ -92,21 +91,3 @@ for path in glob.glob('/content/drive/MyDrive/unite/yolov5/runs/detect/exp5/labe
   print(path)
   print(result[-4:])
 """
-
-# --실행부 -- 
-# yolo Model load : 타요타요 학습된 모델 경로 : 루트 dir에 : ./best.pt 따로 빼기
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='./best.pt', force_reload=True)
-img = Image.open(recently(input_path)) # PIL # 가장 최근 생성된 차량 이미지 읽기
-img = img.filter(ImageFilter.GaussianBlur(radius =1))
-results = model(img, size=640) # 이미지 크롭 
-df = results.pandas().xyxy[0]
-crops = results.crop(save=False) # 크롭 결과 none save 
-# conf = (crop[0]['conf'].item() * 100)
-for num, crop in enumerate(crops) :
-    if 'plate' in crop['label'] and crop['conf'].item() * 100 > 50 :
-        image = crop['im']
-        im = Image.fromarray(image)   
-        im.save(os.path.join(path, f'plate_result.png'), 'png',dpi=(300,300))
-
-
-easy_ocr(recently('./crops/'))
