@@ -17,7 +17,7 @@ from operator import itemgetter
 S3 = boto3.client('s3')
 bucket = '1iotjj'
 path = './crops'
-AI2_Path = './crops2'
+labels_Path = './labels'
 input_path = './input_img/'
 
 # 가장 최근 생성된(생성시각 이 큰) 파일을 리턴하는 함수 
@@ -34,17 +34,17 @@ def recently(folder_path) :
 
 def YOLO(path) :
     model = torch.hub.load('ultralytics/yolov5', 'custom', path='./V2.pt', force_reload=True)
-    model.multi_label = True
     # 가장 최근 생성된 차량 이미지 읽기 
     img = Image.open(recently(path)) # PIL
-    img = img.filter(ImageFilter.GaussianBlur(radius =1))
     results = model(img, size=640) # 이미지 크롭 
-    df = results.pandas().xyxy[0]
-    crops = results.crop(save=False) # ./test_crops1 dir 생성 요
-    labels = results.label(save = True)
-    f = open(f'labels.txt', 'w')
-    f.write(labels)
-    f.close
+    torch.save(results, labels_Path)
+    loaded_model = torch.load(labels_Path)
+    for p in loaded_model.parameters():
+        f = open(f'labels.txt', 'w')
+        f.write(p)
+        f.close
+
+
 
 #python detect.py --weights runs/train/exp2/weights/best.pt --img 640 --conf 0.1 --source Tayo2-3/test/images \--save-conf \--save-txt
 #이놈이 이미지를 가져와서 돌린 결과의 labels의 경로를 잡고 그경롤 YOLO_2에 넣어야됨 
