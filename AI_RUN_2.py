@@ -41,7 +41,7 @@ def YOLO(path) :
     crops = results.crop(save=False) # ./test_crops1 dir 생성 요
   #  conf = (crop[0]['conf'].item() * 100)
     for crop in enumerate(crops) :
-        print(crop.item())
+        print(crop)
 
 """
         if 'plate' in crop['label'] and crop['conf'].item() * 100 > 0:
