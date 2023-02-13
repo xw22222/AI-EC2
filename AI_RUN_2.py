@@ -38,8 +38,15 @@ def YOLO(path) :
     img = Image.open(recently(path)) # PIL
     results = model(img, size=640) # 이미지 크롭
     df = results.pandas().xyxy[0]
-    print(df)
-    
+    crops = results.crop(save=False) # ./test_crops1 dir 생성 요
+    conf = (crop[0]['conf'].item() * 100)
+    for num, crop in enumerate(crops) :
+        if 'plate' in crop['label'] and crop['conf'].item() * 100 > 0:
+            # if 'plate' in crop['label'] and crop['conf'].item() 
+            image = crop['im']
+            im = Image.fromarray(image)   
+            im.save(os.path.join('./crops2' , f'plate_result.png'), 'png',dpi=(300,300))
+    print(conf)
     """
     torch.save(results, '/labels')
     loaded_model = torch.load('./labels')
