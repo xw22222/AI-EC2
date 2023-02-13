@@ -95,4 +95,4 @@ for path in glob.glob('/content/drive/MyDrive/unite/yolov5/runs/detect/exp5/labe
 """
 
 
-YOLO(recently(input_path))
+YOLO(input_path)
