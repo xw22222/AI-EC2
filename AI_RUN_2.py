@@ -39,6 +39,9 @@ def YOLO(path) :
     results = model(img, size=640) # 이미지 크롭
     df = results.pandas().xyxy[0]
     crops = results.crop(save=False) # ./test_crops1 dir 생성 요
+    print(crops.item())
+
+    """
     conf = (crop[0]['conf'].item() * 100)
     for num, crop in enumerate(crops) :
         if 'plate' in crop['label'] and crop['conf'].item() * 100 > 0:
@@ -47,19 +50,20 @@ def YOLO(path) :
             im = Image.fromarray(image)   
             im.save(os.path.join('./crops2' , f'plate_result.png'), 'png',dpi=(300,300))
     print(conf)
-    """
+    
     torch.save(results, '/labels')
     loaded_model = torch.load('./labels')
     for p in loaded_model.parameters():
         f = open(f'labels.txt', 'w')
         f.write(p)
         f.close
+        """
 """
 
 
 #python detect.py --weights runs/train/exp2/weights/best.pt --img 640 --conf 0.1 --source Tayo2-3/test/images \--save-conf \--save-txt
 #이놈이 이미지를 가져와서 돌린 결과의 labels의 경로를 잡고 그경롤 YOLO_2에 넣어야됨 
-"""
+
 def YOLO_2 (path) :
     input = recently(input_path) # 가장 최근 수신된 이미지를 받는 변수 input
     resultname = os.path.basename(input)    # 파일에서 이름만 resultname으로 가져옴/ 버킷에 올릴때만 필요 
@@ -84,8 +88,7 @@ def YOLO_2 (path) :
     f.write(result) #결과부분 만 쓰기 모드로 작성
     f.close()
     S3.upload_file(f'carnum2.txt', bucket,'carnum2/'+ f'{resultname}.txt') #S3/carnum dir에 최근 input_img.txt로 업로드
-"""
-"""
+
 for path in glob.glob('/content/drive/MyDrive/unite/yolov5/runs/detect/exp5/labels/*.txt'):
   li = []
   with open(path) as f:
@@ -103,7 +106,7 @@ for path in glob.glob('/content/drive/MyDrive/unite/yolov5/runs/detect/exp5/labe
 
   print(path)
   print(result[-4:])
-"""
 
+"""
 
 YOLO(input_path)
