@@ -36,14 +36,16 @@ def YOLO(path) :
     model = torch.hub.load('ultralytics/yolov5', 'custom', path='./V2.pt', force_reload=True)
     # 가장 최근 생성된 차량 이미지 읽기 
     img = Image.open(recently(path)) # PIL
-    results = model(img, size=640) # 이미지 크롭 
-    torch.save(results, './labels')
+    results = model(img, size=640) # 이미지 크롭
+    results.print() 
+    """
+    torch.save(results, '/labels')
     loaded_model = torch.load('./labels')
     for p in loaded_model.parameters():
         f = open(f'labels.txt', 'w')
         f.write(p)
         f.close
-
+"""
 
 
 #python detect.py --weights runs/train/exp2/weights/best.pt --img 640 --conf 0.1 --source Tayo2-3/test/images \--save-conf \--save-txt
