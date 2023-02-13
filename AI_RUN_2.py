@@ -43,7 +43,7 @@ def YOLO(path) :
     for crop in enumerate(crops) :
         print(crop.item())
 
-  """
+"""
         if 'plate' in crop['label'] and crop['conf'].item() * 100 > 0:
             # if 'plate' in crop['label'] and crop['conf'].item() 
             image = crop['im']
