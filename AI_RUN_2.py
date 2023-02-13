@@ -37,7 +37,9 @@ def YOLO(path) :
     # 가장 최근 생성된 차량 이미지 읽기 
     img = Image.open(recently(path)) # PIL
     results = model(img, size=640) # 이미지 크롭
-    results.print() 
+    df = results.pandas().xyxy[0]
+    print(df)
+    
     """
     torch.save(results, '/labels')
     loaded_model = torch.load('./labels')
