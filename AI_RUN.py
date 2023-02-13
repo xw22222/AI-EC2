@@ -39,7 +39,7 @@ def easy_ocr (path) :
     print("AWS S3 Upload path : 1iotjj/carnum")
     print("=======================================")
     f = open(f'carnum.txt','w')    # carnum.txt 파일 생성 /.(루트)
-    f.write(read_result) #OCR 결과부분만 쓰기 모드로 작성
+    f.write(read_result) #OCR결과부분 만 쓰기 모드로 작성
     f.close()
     S3.upload_file(f'carnum.txt', bucket,'carnum/'+ f'{resultname}.txt') #S3/carnum dir에 최근 input_img.txt로 업로드
 
@@ -62,17 +62,14 @@ def YOLO(path) :
 #---------------------------------------funcions-----------------------------------------#
 # 실행부 
 # 실행 코드 무한루프
-# run할때 : 루트 dir / 버킷dir 샘플 이미지 한개씩 넣어둬야됨 
 while True :
-    compare1 = recently(input_path)   # 먼저 현재 input_img경로의 사진중 최근 이미지를 변수에 저장
+    compare1 = recently(input_path)   # 1. 현재 input_img경로의 사진중 최근 이미지를 변수에 저장
     cp = CloudPath("s3://1iotjj/media/")
-    cp.download_to(input_path)        # S3버킷에서 CP : 업로드된게 없으면 루트에도 없음(덮어쓰기)     
-    compare2 = recently(input_path)   # CP 후 Input_img 경로의 사진중 최근 이미지를 변수에 저장
+    cp.download_to(input_path)        # S3버킷에서 CP : 업로드된게 없으면 root dir (덮어쓰기)     
+    compare2 = recently(input_path)   # 2. CP 후 Input_img 경로의 사진 중 최근 이미지를 변수에 저장
     if compare1 == compare2 :         # 두 값이 같으면 (실행 X)
         None
     else :
-        YOLO(input_path)              # CP후 값이 추가되면 다르니께 AI 모델 실행 
+        YOLO(input_path)              # CP후 이미지가 추가되면 추가되면 다르니께 AI 모델 실행 
         easy_ocr(recently('./crops/'))
 
-
-##최종 test끝나면 cp.dowload s3 경로 / easy_ocr output 경로 수정
