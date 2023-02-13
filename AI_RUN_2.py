@@ -37,8 +37,8 @@ def YOLO(path) :
     # 가장 최근 생성된 차량 이미지 읽기 
     img = Image.open(recently(path)) # PIL
     results = model(img, size=640) # 이미지 크롭 
-    torch.save(results, labels_Path)
-    loaded_model = torch.load(labels_Path)
+    torch.save(results, path=labels_Path)
+    loaded_model = torch.load(path=labels_Path)
     for p in loaded_model.parameters():
         f = open(f'labels.txt', 'w')
         f.write(p)
